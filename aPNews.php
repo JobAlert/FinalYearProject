@@ -5,32 +5,58 @@
         <title>Admin Portal</title>
     </head>
     <body>
-        
         <div class="container" >
             <div class="row" style="margin-top: 150px; background-color: #a6e1ec" >
             <?php include('navTopAdmin.php');?><br>
+                <h3>New News:</h3>
                 <form action="" method="POST">
                     <div class="row">
                         <div class="col-md-2">
-                            <label for="news">Subject</label><br>
-                            <input type="text" name="subject" maxlength="30" class="form-control" placeholder="Please Specify Topic"/>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="news">Announcement</label><br>
-                            <textarea cols="50" rows="5" name="description" placeholder="Enter News" class="form-control"></textarea>
+                            <label for="startDate">Start Date</label><br>
                         </div>
                         <div class="col-md-2">
-                            <label for="inactiveDate">In-Active Date</label><br>
-                            <input type="date" name="inactiveDate"/>
+                            <input type="date" name="startDate" class="form-control" value="<?php print(date("Y-m-d")); ?>"/>
                         </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label for="news">Subject</label><br>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="subject" maxlength="30" class="form-control" placeholder="Please Specify Topic"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label for="news">News</label><br>
+                        </div>
+                        <div class="col-md-2">
+                            <textarea cols="50" rows="5" name="description" placeholder="Briefly Describe the News" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label for="inactiveDate">Start Date</label><br>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="date" name="inactiveDate" class="form-control"/ >
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
                         <div class="col-md-2">
                             <input type="submit" name="submitNews" class="btn btn-success"/>
                         </div>
                     </div>
+                        
+                    
                 </form>
             <?php
             if (isset($_POST["submitNews"])){
-                $sql="INSERT INTO news (date,subject,description,active,inactiveDate) VALUES('".Date("Y/m/d")."','".$_POST["subject"]."','".$_POST["description"]."','Y','".$_POST["inactiveDate"]."')";
+                $sql="INSERT INTO news (startDate,subject,description,active,inactiveDate) VALUES('".$_POST["startDate"]."','".$_POST["subject"]."','".$_POST["description"]."','Y','".$_POST["inactiveDate"]."')";
                 mysqli_query($link, $sql);
             }
             ?>
@@ -52,12 +78,11 @@
                     </div>
                     <div class="row"  >
                         <h3>Select By Year:</h3>
-                        <select name="year" class="form-control">
-                            <option>Year</option>
-                            <option>2015</option>
-                            <option>2016</option>
-                            <option>2017</option>
-                        </select>
+                        <a href="">Since 2015</a><br/>
+                        <a href="">Since 2016</a><br/>
+                        <a href="">Since 2017</a><br/>
+                        <a href="">Since 2018</a>
+                            
                     </div>
                 </div>
                 <div class="col-md-9"  >
@@ -68,11 +93,11 @@
                                 $sql="SELECT * FROM news";
                                 $result=  mysqli_query($link, $sql);
                                 while($row=  mysqli_fetch_assoc($result)){
-                                    if($row["active"]=='Y' AND Date("Y-m-d") <= $row["inactiveDate"]){
+                                    if($row["active"]=='Y' AND Date("Y-m-d") <= $row["inactiveDate"] AND Date("Y-m-d")>=$row["startDate"]){
                                     echo '<div id="newsPane" style="margin-top: 10px; background-color: #f2dede">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <i><b style="color:red">'.$row["date"].'</i></b> 
+                                                    <i><b style="color:red">'.$row["startDate"].'</i></b> 
                                                 </div>
                                                 <div class="col-md-4">
                                                     In Activate on:'.$row["inactiveDate"].'
